@@ -2,7 +2,7 @@ const siteMetadata = {
   title: 'CheatCodes',
   author: 'Apurva Shah',
   headerTitle: 'CheatCodes',
-  description: 'Thoughts from a wandering mind',
+  description: 'Cheat Codes',
   language: 'en-us',
   siteUrl: 'https://www.blog.apurvashah.org',
   siteRepo: 'https://www.blog.apurvashah.org',

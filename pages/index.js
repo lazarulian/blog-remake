@@ -26,16 +26,13 @@ export default function Home({ posts }) {
               Hi, I'm Apurva Shah
             </h1>
             <h2 className="text-lg prose text-gray-600 dark:text-gray-400">
-              {`Welcome to my blog - ${siteMetadata.description}. I am the co-founder of Cylynx, a data
-            scientist by profession and economist by training. In my free time, I like developing `}
-              <Link href="/projects">side projects</Link>
-              {' and '}
-              <Link href="/blog">blogging</Link>
-              {' about them. Have a good read!'}
+              From developing projects for my community to one bagging around the world, I hope this
+              journey through the highs and lows of my life can lend you some cheat codes for your
+              own.
             </h2>
           </div>
           <div className="flex items-center justify-center mx-2 my-12 w-96">
-            <BlogNewsletterForm title="Stay updated, receive the latest post straight to your mailbox" />
+            {/* <BlogNewsletterForm title="Stay updated, receive the latest post straight to your mailbox" /> */}
           </div>
         </div>
         <h2 className="flex pb-6 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-3xl md:text-5xl">
