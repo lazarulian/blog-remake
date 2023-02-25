@@ -1,11 +1,12 @@
 import Link from '@/components/Link'
-import { PageSEO } from '@/components/SEO'
+import DefaultSEO from '@/components/seo/DefaultSEO'
 import Tag from '@/components/Tag'
 import { BlogNewsletterForm } from '@/components/NewsletterForm'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
 import Image from 'next/image'
+import { NextSeo } from 'next-seo'
 
 const MAX_DISPLAY = 5
 
@@ -16,9 +17,11 @@ export async function getStaticProps() {
 }
 
 export default function Home({ posts }) {
+  const title = 'CheatCodes | Apurva Shah'
+  const description = "Sharing the things I've picked up throughout the journey that is life."
   return (
     <>
-      <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
+      <DefaultSEO title={title} description={description} />
       <div>
         <div className="flex flex-col items-center my-6 xl:flex-row gap-x-12 xl:mb-12">
           <div className="pt-6">

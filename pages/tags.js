@@ -1,5 +1,6 @@
 import Link from '@/components/Link'
 import { PageSEO } from '@/components/SEO'
+import DefaultSEO from '@/components/seo/DefaultSEO'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllTags } from '@/lib/tags'
@@ -15,7 +16,7 @@ export default function Tags({ tags }) {
   const sortedTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a])
   return (
     <>
-      <PageSEO title={`Tags - ${siteMetadata.author}`} description="Things I blog about" />
+      <DefaultSEO title="Tags" description="Filter through blogs with tags." />
       <div className="flex flex-col items-start justify-start divide-y divide-gray-200 dark:divide-gray-700 md:justify-center md:items-center md:divide-y-0 md:flex-row md:space-x-6 md:mt-24">
         <div className="pt-6 pb-8 space-x-2 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 md:border-r-2 md:px-6">
