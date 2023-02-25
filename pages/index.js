@@ -6,7 +6,6 @@ import siteMetadata from '@/data/siteMetadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
 import Image from 'next/image'
-import { NextSeo } from 'next-seo'
 
 const MAX_DISPLAY = 5
 
