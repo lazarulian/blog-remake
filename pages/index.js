@@ -6,8 +6,9 @@ import siteMetadata from '@/data/siteMetadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
 import Image from 'next/image'
+import Rocket from '@/components/Rocket'
 
-const MAX_DISPLAY = 5
+const MAX_DISPLAY = 2
 
 export async function getStaticProps() {
   const posts = await getAllFilesFrontMatter('blog')
@@ -33,8 +34,9 @@ export default function Home({ posts }) {
               own.
             </h2>
           </div>
-          <div className="flex items-center justify-center mx-2 my-12 w-96">
+          <div className="invisible xl:visible items-center justify-center mx-2 my-12 w-96 pt-5">
             {/* <BlogNewsletterForm title="Stay updated, receive the latest post straight to your mailbox" /> */}
+            <Rocket />
           </div>
         </div>
         <h2 className="flex pb-6 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-3xl md:text-5xl">
