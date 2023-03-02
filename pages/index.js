@@ -16,18 +16,22 @@ const MAX_DISPLAY = 4
 export async function getStaticProps() {
   const posts = await getAllFilesFrontMatter('blog')
   const featuredPosts = posts.filter(
-    (post) => post.draft !== true && post.tags.map((t) => kebabCase(t)).includes('featured')
+    (post) =>
+      post.draft !== true &&
+      post.tags.map((t) => kebabCase(t)).includes('featured') &&
+      post.title.length < 39
   )
 
   return { props: { posts, featuredPosts } }
 }
 
 export default function Home({ posts, featuredPosts }) {
+  const test = 'Financial Advice for your 18th Birthday'
+  console.log(test.length)
   const title = 'CheatCodes | Apurva Shah'
   const description = "Sharing the things I've picked up throughout the journey that is life."
   return (
     <>
-      {/* <FeaturedPosts featuredPosts={featuredPosts} /> */}
       <DefaultSEO title={title} description={description} />
       <div>
         <div className="flex flex-col items-center my-6 xl:flex-row gap-x-12 xl:mb-12">
@@ -49,12 +53,17 @@ export default function Home({ posts, featuredPosts }) {
         <h2 className="flex pb-6 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-3xl md:text-5xl">
           Featured
         </h2>
+        <hr className="border-gray-200 dark:border-gray-700 py-3" />
+        <FeaturedPosts featuredPosts={featuredPosts} />
+        <h2 className="flex pb-6 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-3xl md:text-5xl">
+          Latest
+        </h2>
         <hr className="border-gray-200 dark:border-gray-700" />
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {/* {!posts.length && 'No posts found.'} */}
-          {!featuredPosts.length && 'No posts found.'}
+          {!posts.length && 'No posts found.'}
           {/* {posts.slice(0, MAX_DISPLAY).map((frontMatter) => { */}
-          {featuredPosts.slice(0, MAX_DISPLAY).map((frontMatter) => {
+          {posts.slice(0, MAX_DISPLAY).map((frontMatter) => {
             const { slug, date, title, summary, tags, thumbnail } = frontMatter
             return (
               <li key={slug} className="py-12">
