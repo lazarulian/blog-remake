@@ -27,7 +27,6 @@ export async function getStaticProps() {
 
 export default function Home({ posts, featuredPosts }) {
   const test = 'Financial Advice for your 18th Birthday'
-  console.log(test.length)
   const title = 'CheatCodes | Apurva Shah'
   const description = "Sharing the things I've picked up throughout the journey that is life."
   return (

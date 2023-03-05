@@ -3,7 +3,7 @@ import generateRss from '@/lib/generate-rss'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
-import DefaultSEO from '@/components/seo/DefaultSEO'
+import { NextSeo } from 'next-seo'
 import fs from 'fs'
 import path from 'path'
 
@@ -42,7 +42,11 @@ export default function Tag({ posts, tag }) {
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
   return (
     <>
-      <DefaultSEO title={`Tag | ${tag}`} description={`All of the posts with the tag ${tag}`} />
+      <NextSeo
+        title={`Tag | ${tag}`}
+        description={`All of the posts with the tag ${tag}`}
+        nofollow={true}
+      />
       <ListLayout posts={posts} title={title} />
     </>
   )
