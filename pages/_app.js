@@ -13,8 +13,6 @@ export default function App({ Component, pageProps }) {
     <ThemeProvider attribute="class">
       <Head>
         <meta content="width=device-width, initial-scale=1" name="viewport" />
-        <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#101827" media="(prefers-color-scheme: dark)" />
       </Head>
       <Analytics />
       <LayoutWrapper>
