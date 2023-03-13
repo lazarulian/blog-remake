@@ -1,0 +1,233 @@
+---
+title: Leetcode Arrays and Hashing Solutions
+date: '2023-3-12'
+draft: False
+tags: ['leetcode', 'software-engineering']
+thumbnail: '/static/img/leetcode.jpeg'
+summary: My solutions to NeetCode's Arrays & Hashing in Python and C++.
+---
+
+<br />
+<TOCInline toc={props.toc} exclude="Table of Contents" asDisclosure toHeading={5} />
+
+## NeetCode Link
+
+[Arrays & Hashing](https://neetcode.io/roadmap)
+
+## Contains Duplicate (Easy)
+
+**C++**
+
+```c
+bool containsDuplicate(vector<int>& nums) {
+    // o(n) space and time
+    unordered_set<int> snums;
+    for (int i = 0; i < nums.size(); i++) {
+        if (snums.find(nums[i]) != snums.end()) return true;
+        else snums.insert(nums[i]);
+    }
+    return false;
+}
+```
+
+**Python**
+
+```Python
+def containsDuplicate(self, nums: List[int]) -> bool:
+    # o(n) space and time
+    s = set()
+    for i in nums:
+        if i in s:
+            return True
+        else:
+            s.add(i)
+
+    return False
+```
+
+## Valid Anagram (Easy)
+
+**C++**
+
+```C
+bool isAnagram(string s, string t) {
+    // Initial Size Case
+    if (s.size() != t.size())
+        return false;
+
+    // Map For Storing Values
+    vector<int> counts(26, 0);
+
+    // Loop for Storing
+    const int size = t.size();
+    for (int i = 0; i < size; i++)
+    {
+        counts[s[i] - 'a'] += 1;
+        counts[t[i] - 'a'] -= 1;
+    }
+
+    // Loop for Checking
+    for (int i = 0; i < 26; i++)
+    {
+        if (counts[i] != 0 )
+            return false;
+    }
+    return true;
+}
+```
+
+**Python**
+
+```Python
+def isAnagram(self, s: str, t: str) -> bool:
+    # Setting up Dictionaries
+    s_dict = Counter()
+    t_dict = Counter()
+
+    # Adding to Dictionary
+    if len(s) != len(t):
+        return False
+
+    for i in range(len(s)):
+        s_dict[s[i]] += 1
+        t_dict[t[i]] += 1
+
+    # Checking Dictionaries
+    if s_dict is t_dict:
+        return False
+
+    return True
+```
+
+## Two Sum (Easy)
+
+**C++**
+
+```C
+vector<int> twoSum(vector<int>& nums, int target) {
+    unordered_map<int, int> map;
+
+    for (int i = 0; i < nums.size(); i++) {
+        if (map.find(target-nums[i]) != map.end())
+            return {map[target-nums[i]], i};
+        else map[nums[i]] = i;
+    }
+
+    return {};
+    }
+```
+
+**Python**
+
+```Python
+def twoSum(self, nums: List[int], target: int) -> List[int]:
+    d = {}
+
+    for count, value in enumerate(nums):
+        diff = target - value
+        if diff in d:
+            return [count, d[diff]]
+        else:
+            d[value] = count
+```
+
+## Question Name
+
+**C++**
+
+```C
+vector<vector<string>> groupAnagrams(vector<string>& strs)  {
+    unordered_map<string, vector<string>> map;
+    vector<vector<string>> res;
+
+    for (int i = 0; i < strs.size(); i++) {
+        string curr = strs[i];
+        sort(curr.begin(), curr.end());
+        map[curr].push_back(strs[i]);
+    }
+
+    for (auto i : map) {
+        res.push_back(i.second);
+    }
+
+    return res;
+    }
+```
+
+**Python**
+
+```Python
+def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+    d = collections.defaultdict(list)
+
+    for word in strs:
+        # Small Map of Letters
+        chars = [0]*26
+
+        # Storing in Map
+        for i in word:
+            chars[ord(i)-ord('a')] += 1
+
+        # Adding to Dictionary
+        d[tuple(chars)].append(word)
+
+    return d.values()
+```
+
+## Top K-Frequent Elements
+
+**C++**
+
+```C
+vector<int> topKFrequent(vector<int>& nums, int k) {
+    unordered_map<int,int> map;
+    for(int num : nums){
+        map[num]++;
+    }
+
+    vector<int> res;
+    // pair<first, second>: first is frequency,  second is number
+    priority_queue<pair<int,int>> pq;
+    for(auto it = map.begin(); it != map.end(); it++){
+        pq.push(make_pair(it->second, it->first));
+        if(pq.size() > (int)map.size() - k){
+            res.push_back(pq.top().second);
+            pq.pop();
+        }
+    }
+    return res;
+}
+```
+
+**Python**
+
+```Python
+def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+    counter = collections.Counter(nums)
+    res = []
+
+    # Create Buckets
+    n = len(nums)
+    buckets = [[] for _ in range(n+1)]
+
+    # Fill Buckets
+    for value, count in counter.items():
+        buckets[count].append(value)
+
+
+    # Find Elements from Buckets
+    while k > 0:
+        # Skip Empty Buckets
+        while len(buckets[n]) == 0:
+            n -=1
+
+        # Look Through Buckets
+        for i in buckets[n]:
+            if k == 0:
+                break
+            res.append(i)
+            k -= 1
+        n -=1
+
+    return res
+```
