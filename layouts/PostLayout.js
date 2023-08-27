@@ -4,7 +4,6 @@ import SectionContainer from '@/components/SectionContainer'
 import Image from '@/components/Image'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import Comments from '@/components/comments'
 import BlogSEO from '@/components/seo/BlogSEO'
 
 const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`
@@ -67,7 +66,6 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                   {` • `}
                   <Link href={editUrl(fileName)}>{'View on GitHub'}</Link>
                 </div>
-                <Comments frontMatter={frontMatter} />
               </div>
               <div className="lg:sticky relative top-8 ">
                 <dl className="pt-6 pb-10 xl:pt-11 xl:border-b xl:border-gray-200 xl:dark:border-gray-700">

@@ -13,12 +13,6 @@ const siteMetadata = {
   twitter: 'https://twitter.com/apurvashahhh',
   linkedin: 'https://www.linkedin.com/in/apurvashahh',
   locale: 'en-US',
-  analytics: {
-    // supports plausible, simpleAnalytics or googleAnalytics
-    plausibleDataDomain: false, // e.g. tailwind-nextjs-starter-blog.vercel.app
-    simpleAnalytics: false, // true or false
-    googleAnalyticsId: 'UA-100201704-1', // e.g. UA-000000-2 or G-XXXXXXX
-  },
   newsletter: {
     // Please add your .env file and modify it according to your selection
     provider: 'emailOctopus',
