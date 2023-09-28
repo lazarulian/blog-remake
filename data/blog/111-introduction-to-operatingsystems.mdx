@@ -1,0 +1,70 @@
+---
+title: Introduction to Operating Systems
+date: '2023-9-28'
+tags: ['cs-111', 'computer-science']
+thumbnail: '/static/img/operating-systems/intro.jpeg'
+summary: An introduction to waht we will be studying in CS111. Examples & Philosophy.
+---
+
+## How the Operating System Speeds up the Slowest Computer on Campus
+
+In the following example, we go over how to fundamentally similar commands, can take different lengths due to the help of the operating system & representation. Consider the following code block:
+
+```bash
+$ printf '\nx\n' | dd obs=1M seek=7T of=big
+$ ls -l
+-rw-rw-r— 1 eggert faculty 8070450532247928835 2023-09-28 13:58 big
+$ cat big    # takes forever because it is reading all the nullbytes
+$ grep x big # please look for that pattern in this file -> instant response
+$ grep y big # please look for that pattern in this file -> instant response
+```
+
+- The **`printf '\nx\n'`** command:
+  - **`'\nx\n'`** is the data being formatted, which consists of a newline character, the character **`x`**, and another newline character.
+- **`dd obs=1M seek=7T of=big`**:
+  - **`dd`** is a command used for copying and converting raw data.
+  - **`obs=1M`** instructs **`dd`** to set the Output Block Size to 1 Megabyte.
+  - **`seek=7T`** instructs **`dd`** to skip forward by 7 Terabytes before starting the copying process.
+  - **`of=big`** specifies the name of the output file to be **`big`**.
+
+The **`dd`** command initiates an IO operation with a size of 1M (2^20). Implicitly invoked by the **`seek`** parameter in **`dd`**, the **`lseek`** function instructs the system to leap forward in the output file by 7 tera records (7*2^40), and from that point, it alternates between reading and writing operations. The resultant file size of **`big`** is calculated to be 7*2\*\*60 + 3, as each operation moves the file position forward beyond the existing end of the file, extending the file with zeros (null bytes).
+
+### Representation
+
+The **`dd`** command in the example creates a sparse file, which is a file where blocks of zeros aren't physically stored on disk, but are **_represented_** as metadata by the file system, saving substantial disk space. Despite its 7-terabyte size, the actual on-disk representation of **`big`** is much smaller due to this sparse file handling.
+
+The operating system and file system work together to present the sparse file as a regular file to applications, ensuring consistency while efficiently managing storage resources. To actually show how the representation can work with the OS, consider the following example with **`cat`** and **`grep`**.
+
+### CAT vs. Grep (OS SPEED)
+
+When executing **`cat big`**, a significant amount of time is required to complete the process since it needs to traverse through a vast span of null bytes in the large file before reaching and displaying the actual data.
+
+On the other hand, **`grep`** is designed to search for specific patterns within a file. When you run **`grep x big`** or **`grep y big`**, **`grep`** starts scanning the file, and as soon as it finds the specified pattern, it outputs the line containing the pattern and moves to the next line. **`grep`** doesn't have to read through the entire file if the pattern is found early on, which can save a significant amount of time.
+
+In this case, **`grep`** can leverage the **`lseek`** system call to swiftly skip over parts of the file that don't contain the target pattern, thanks to metadata or indexing. Unlike **`cat`**, which reads the file sequentially, **`grep`** can jump directly to relevant parts of the file using the information from metadata, thus optimizing the search process and executing much faster. This use of **`lseek`** reflects how programs can interact with the operating system and file system efficiently, utilizing the internal representations of files.
+
+## Philosophical Definitions
+
+**System (OED)** has a few definitions: An organized or connected group of objects, a set of principles (a scheme, method), σύστημα systēma (ancient greek). There are some things to take away from this.
+
+![System](https://leadstaracademy.com/wp-content/uploads/2020/09/system-characteristics.jpg)
+
+In a way, a system embodies a set of underlying principles. Each system consists of interlinked components, and these components could encapsulate other systems within them.
+
+**Operating System** is a software design to control the hardware of a specific data processing system in order to allow users and application programmers to make use of it. The issue with this definition is in the word _specific_ data processing system. Nowadays, most operating systems are portable and intended to be used on a lot of different types of machines.
+
+Another definition of operating system is _the master control program of a computer._ Before we jump into this definition and specifically control, we need to talk about policy vs. mechanism.
+
+### Policy vs. Mechanism
+
+| Name      | Definition                    | Example                                          |
+| --------- | ----------------------------- | ------------------------------------------------ |
+| Policy    | What we want out of something | Excess speed in traffic safety                   |
+| Mechanism | how to get what we want       | Traffic Tickets, Police Enforcement, Speed Bumps |
+
+Although we would like to draw the line between policy and mechanism, for different perspectives, it might not always be clear. Now lets bring this example into the OS.
+
+| OS Policy                                       | OS Permission                                                                               |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Prevent unauthorized modification of data.      | File permissions and file access enforcement.                                               |
+| Each program that wants to run eventually runs. | Operating system scheduler that creates a fair schedule. (Now uses ML to do the scheduling) |
