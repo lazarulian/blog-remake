@@ -1,7 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import formatDate from 'legacy/lib/utils/formatDate'
+import { formatDate } from 'pliny/utils/formatDate'
+import ShootingStarBorder from '../animations/ShootingStar'
 
 function ProjectCard({ slug, date, title, tags, thumbnail, summary }) {
   return (
@@ -9,7 +10,7 @@ function ProjectCard({ slug, date, title, tags, thumbnail, summary }) {
       {/* Image */}
       <Link
         href={`/blog/${slug}`}
-        className={`border-fun-gray hover:border-fun-pink will-change-projectCard relative w-full rounded-xl border p-2 transition hover:-translate-y-2 hover:opacity-75`}
+        className={`animate-background relative w-full rounded-xl border p-2 transition duration-300 hover:-translate-y-2 hover:opacity-75`}
       >
         <img className="h-56 w-full rounded-md object-cover" src={thumbnail} />
       </Link>
@@ -32,6 +33,7 @@ function ProjectCard({ slug, date, title, tags, thumbnail, summary }) {
                   <div className="m-1 rounded-lg bg-slate-800 px-2 py-1 text-sm duration-150 hover:opacity-50">
                     {tag}
                   </div>
+                  {/* <ShootingStarBorder content={tag}/> */}
                 </Link>
               </li>
             )

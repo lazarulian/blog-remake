@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import Tag from '../Tag'
-import formatDate from 'legacy/lib/utils/formatDate'
+import { formatDate } from 'pliny/utils/formatDate'
 
 const HomeList = ({ posts, MAX_DISPLAY }) => {
   if (!MAX_DISPLAY) {
