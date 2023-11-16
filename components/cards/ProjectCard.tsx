@@ -28,7 +28,11 @@ function ProjectCard({ slug, date, title, tags, thumbnail, summary }) {
           {tags.map((tag, index) => {
             return (
               <li key={tag}>
-                <div className="m-1 rounded-lg bg-slate-800 px-2 py-1 text-sm">{tag}</div>
+                <Link href={`/tags/${tag}`}>
+                  <div className="m-1 rounded-lg bg-slate-800 px-2 py-1 text-sm duration-150 hover:opacity-50">
+                    {tag}
+                  </div>
+                </Link>
               </li>
             )
           })}
