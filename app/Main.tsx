@@ -7,6 +7,7 @@ import NewsletterForm from 'pliny/ui/NewsletterForm'
 const MAX_DISPLAY = 5
 
 export default function Home({ posts }) {
+  const filteredPosts = posts.filter((post) => !post.tags.includes('notes') && post.draft != true)
   return (
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -28,8 +29,8 @@ export default function Home({ posts }) {
           </h1>
         </div>
       </div>
-      <HomeList posts={posts} MAX_DISPLAY={MAX_DISPLAY} />
-      {posts.length > MAX_DISPLAY && (
+      <HomeList posts={filteredPosts} MAX_DISPLAY={MAX_DISPLAY} />
+      {filteredPosts.length > MAX_DISPLAY && (
         <div className="flex justify-end text-base font-medium leading-6">
           <Link
             href="/blog"

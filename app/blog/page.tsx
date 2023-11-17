@@ -8,13 +8,18 @@ export const metadata = genPageMetadata({ title: 'Blog' })
 
 export default function BlogPage() {
   const posts = allCoreContent(sortPosts(allBlogs))
+  const filteredPosts = posts.filter((post) => !post.tags.includes('notes') && post.draft != true)
   return (
     <div>
       <PageTitle>All Blogs</PageTitle>
+      <p className="py-2">
+        All of the blogs excluding class notes. If you want those, please take a look at the classes
+        tag into the tag section.
+      </p>
       <br />
       <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-3">
-        {posts.map((post) => {
-          const { slug, date, title, summary, tags, thumbnail } = post
+        {filteredPosts.map((filteredPost) => {
+          const { slug, date, title, summary, tags, thumbnail } = filteredPost
           return (
             <ul className="pb-10" key={slug}>
               <ProjectCard
