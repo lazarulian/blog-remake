@@ -25,12 +25,14 @@ function ProjectCard({ slug, date, title, tags, thumbnail, summary }) {
         <p className="text-fun-gray text-left text-sm">{summary}</p>
         {/* Tags */}
         <ul className="-ml-2 mt-2 flex list-none flex-wrap items-center">
-          <li className="m-1 rounded-lg bg-slate-600 px-2 py-1 text-sm">{formatDate(date)}</li>
+          <li className="m-1 rounded-lg bg-slate-300 px-2 py-1 text-sm dark:bg-slate-600">
+            {formatDate(date)}
+          </li>
           {tags.map((tag, index) => {
             return (
               <li key={tag}>
                 <Link href={`/tags/${tag.toLowerCase()}`}>
-                  <div className="m-1 rounded-lg bg-slate-800 px-2 py-1 text-sm duration-150 hover:opacity-50">
+                  <div className="m-1 rounded-lg bg-slate-100 px-2 py-1 text-sm duration-150 hover:opacity-50 dark:bg-slate-800">
                     {tag.toLowerCase()}
                   </div>
                   {/* <ShootingStarBorder content={tag}/> */}
