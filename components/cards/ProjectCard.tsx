@@ -2,7 +2,6 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { formatDate } from 'pliny/utils/formatDate'
-import ShootingStarBorder from '../animations/ShootingStar'
 
 function ProjectCard({ slug, date, title, tags, thumbnail, summary }) {
   return (

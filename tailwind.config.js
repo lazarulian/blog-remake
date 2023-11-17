@@ -15,21 +15,9 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
-      animation: {
-        flip: 'flip 6s infinite steps(2, end)',
-        rotate: 'rotate 3s linear infinite both',
-      },
-      keyframes: {
-        flip: {
-          to: {
-            transform: 'rotate(360deg)',
-          },
-        },
-        rotate: {
-          to: {
-            transform: 'rotate(90deg)',
-          },
-        },
+      aspectRatio: {
+        '4/3': '4 / 3',
+        '8/5': '8 / 5',
       },
       lineHeight: {
         11: '2.75rem',
@@ -46,9 +34,9 @@ module.exports = {
         DEFAULT: {
           css: {
             a: {
-              color: theme('colors.primary.500'),
+              color: theme('colors.primary.600'),
               '&:hover': {
-                color: `${theme('colors.primary.600')}`,
+                color: `${theme('colors.primary.800')}`,
               },
               code: { color: theme('colors.primary.400') },
             },
@@ -60,7 +48,40 @@ module.exports = {
               fontWeight: '600',
             },
             code: {
-              color: theme('colors.indigo.500'),
+              color: theme('colors.gray.800'),
+              backgroundColor: theme('colors.gray.200'),
+              paddingLeft: '4px',
+              paddingRight: '4px',
+              paddingTop: '2px',
+              paddingBottom: '2px',
+              borderRadius: '0.25rem',
+            },
+            'code::before': {
+              content: 'none',
+            },
+            'code::after': {
+              content: 'none',
+            },
+            details: {
+              backgroundColor: theme('colors.gray.100'),
+              paddingLeft: '4px',
+              paddingRight: '4px',
+              paddingTop: '2px',
+              paddingBottom: '2px',
+              borderRadius: '0.25rem',
+            },
+            hr: { borderColor: theme('colors.gray.200') },
+            'ol li::marker': {
+              fontWeight: '600',
+              color: theme('colors.gray.500'),
+            },
+            'ul li::marker': {
+              backgroundColor: theme('colors.gray.500'),
+            },
+            strong: { color: theme('colors.gray.600') },
+            blockquote: {
+              color: theme('colors.gray.900'),
+              borderLeftColor: theme('colors.gray.200'),
             },
           },
         },
@@ -75,6 +96,47 @@ module.exports = {
             },
             'h1,h2,h3,h4,h5,h6': {
               color: theme('colors.gray.100'),
+            },
+            code: {
+              color: theme('colors.gray.100'),
+              backgroundColor: theme('colors.black'),
+              paddingLeft: '4px',
+              paddingRight: '4px',
+              paddingTop: '2px',
+              paddingBottom: '2px',
+              borderRadius: '0.25rem',
+            },
+            'code::before': {
+              content: 'none',
+            },
+            'code::after': {
+              content: 'none',
+            },
+            details: {
+              backgroundColor: theme('colors.gray.800'),
+            },
+            hr: { borderColor: theme('colors.gray.700') },
+            'ol li::marker': {
+              fontWeight: '600',
+              color: theme('colors.gray.400'),
+            },
+            'ul li::marker': {
+              backgroundColor: theme('colors.gray.400'),
+            },
+            strong: { color: theme('colors.gray.100') },
+            thead: {
+              th: {
+                color: theme('colors.gray.100'),
+              },
+            },
+            tbody: {
+              tr: {
+                borderBottomColor: theme('colors.gray.700'),
+              },
+            },
+            blockquote: {
+              color: theme('colors.gray.100'),
+              borderLeftColor: theme('colors.gray.700'),
             },
           },
         },
