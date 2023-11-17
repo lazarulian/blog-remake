@@ -7,5 +7,11 @@ export const metadata = genPageMetadata({ title: 'Blog' })
 
 export default function BlogPage() {
   const posts = allCoreContent(sortPosts(allBlogs))
-  return <ListLayout posts={posts} title="All Posts" />
+  return (
+    <>
+      <div className="px-2">
+        <ListLayout posts={posts} title="All Posts" />
+      </div>
+    </>
+  )
 }

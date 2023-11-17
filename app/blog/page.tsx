@@ -10,7 +10,7 @@ export default function BlogPage() {
   const posts = allCoreContent(sortPosts(allBlogs))
   const filteredPosts = posts.filter((post) => !post.tags.includes('notes') && post.draft != true)
   return (
-    <div>
+    <div className="px-2">
       <PageTitle>All Blogs</PageTitle>
       <p className="py-2">
         All of the blogs excluding class notes. If you want those, please take a look at the classes
