@@ -29,9 +29,9 @@ function ProjectCard({ slug, date, title, tags, thumbnail, summary }) {
           {tags.map((tag, index) => {
             return (
               <li key={tag}>
-                <Link href={`/tags/${tag}`}>
+                <Link href={`/tags/${tag.toLowerCase()}`}>
                   <div className="m-1 rounded-lg bg-slate-800 px-2 py-1 text-sm duration-150 hover:opacity-50">
-                    {tag}
+                    {tag.toLowerCase()}
                   </div>
                   {/* <ShootingStarBorder content={tag}/> */}
                 </Link>

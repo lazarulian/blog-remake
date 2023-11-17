@@ -3,14 +3,12 @@
 
 import { usePathname } from 'next/navigation'
 import { slug } from 'github-slugger'
-import FeaturedPostCard from '@/components/cards/FeaturedPostCard'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog } from 'contentlayer/generated'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
-import siteMetadata from '@/data/siteMetadata'
 import tagData from 'app/tag-data.json'
-import HomeList from '@/components/lists/HomeList'
+import PageTitle from '@/components/PageTitle'
 import ProjectCard from '@/components/cards/ProjectCard'
 
 interface PaginationProps {
@@ -76,15 +74,10 @@ export default function ListLayoutWithTags({
   const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
 
   const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
-
+  console.log(title)
   return (
     <>
       <div>
-        <div className="pb-6 pt-6">
-          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:hidden sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-            {title}
-          </h1>
-        </div>
         <div className="flex sm:space-x-24">
           {/* Tags List */}
           <div className="hidden h-full max-h-screen min-w-[280px] max-w-[280px] flex-wrap overflow-auto rounded bg-gray-50 pt-5 shadow-md dark:bg-gray-900/70 dark:shadow-gray-800/40 sm:flex">
@@ -123,6 +116,9 @@ export default function ListLayoutWithTags({
             </div>
           </div>
           <div>
+            <div className="pb-6">
+              <PageTitle>{title}</PageTitle>
+            </div>
             {!posts.length && 'No posts found.'}
             {posts.slice(0, 1000).map((post) => {
               const { slug, date, title, summary, tags, thumbnail } = post
