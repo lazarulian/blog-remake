@@ -5,7 +5,7 @@ import { genPageMetadata } from 'app/seo'
 
 export const metadata = genPageMetadata({
   title: 'Browse',
-  openGraph: { images: '/static/img/seo/tags.png' },
+  openGraph: { images: '/static/img/seo/Tags.png' },
 })
 
 export default function BlogPage() {
