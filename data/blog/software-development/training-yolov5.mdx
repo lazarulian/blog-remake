@@ -1,0 +1,24 @@
+---
+title: Training a Deep Learning Model using Custom Data & Yolov5
+
+date: '2023-3-7'
+draft: True
+tags: ['software-engineering']
+thumbnail: '/static/img/cs35L.jpeg'
+summary: A guide on how to train a yolov5 model on custom data.
+---
+
+<TOCInline toc={props.toc} exclude="Overview" toHeading={2} />
+
+Training a YOLOv5 model on custom data involves the following steps:
+
+1. Data preparation: The first step is to prepare the dataset by organizing the images and annotations in the YOLO format. YOLOv5 requires that images are in .jpg format and annotations are in .txt format. The annotations should include the class of the object in the image, as well as the coordinates of the bounding box that surrounds the object.
+2. Data augmentation: Data augmentation is the process of generating new training images from the existing dataset by applying random transformations such as rotation, scaling, flipping, and more. This can help increase the variability of the training data and improve the robustness of the model.
+3. Model configuration: The next step is to configure the YOLOv5 model to be trained on the custom dataset. This involves editing the configuration files to set the number of classes, the path to the training and validation data, the batch size, the learning rate, and other hyperparameters.
+4. Training: The model can then be trained using the prepared data and configuration files. The training process involves optimizing the model weights to minimize the loss function, which measures the difference between the predicted bounding boxes and the ground-truth bounding boxes.
+5. Evaluation: After training, the model can be evaluated on a separate test set to measure its performance. This involves computing metrics such as precision, recall, and F1 score, which measure the accuracy of the model in detecting objects.
+6. Deployment: Finally, the trained model can be deployed for inference on new images. This involves using the model to predict the bounding boxes and classes of objects in the image, which can be visualized and used for various applications such as object detection and tracking, autonomous vehicles, and more.
+
+There are many resources available online that provide step-by-step guides and tutorials on how to train YOLOv5 on custom data using popular deep learning frameworks such as PyTorch and TensorFlow.
+
+---
