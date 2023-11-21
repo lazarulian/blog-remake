@@ -3,7 +3,10 @@ import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import { allBlogs } from 'contentlayer/generated'
 import { genPageMetadata } from 'app/seo'
 
-export const metadata = genPageMetadata({ title: 'Blog' })
+export const metadata = genPageMetadata({
+  title: 'Browse',
+  openGraph: { images: '/static/img/seo/tags.png' },
+})
 
 export default function BlogPage() {
   const posts = allCoreContent(sortPosts(allBlogs))

@@ -8,8 +8,8 @@ const siteMetadata = {
   theme: 'system', // system, dark or light
   siteUrl: 'https://www.blog.apurvashah.org',
   siteRepo: 'https://www.blog.apurvashah.org',
-  siteLogo: '/static/images/logo.png',
-  socialBanner: '/static/images/twitter-card.png',
+  siteLogo: '/static/img/logo.png',
+  socialBanner: '/static/img/twitter-card.png',
   email: 'apurvashah@ucla.edu',
   github: 'https://github.com/lazarulian',
   twitter: 'https://twitter.com/apurvashahhh',

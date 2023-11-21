@@ -4,7 +4,10 @@ import { genPageMetadata } from 'app/seo'
 import PageTitle from '@/components/PageTitle'
 import ProjectCard from '@/components/cards/ProjectCard'
 
-export const metadata = genPageMetadata({ title: 'Blog' })
+export const metadata = genPageMetadata({
+  title: 'Blog',
+  openGraph: { images: '/static/img/seo/AllBlogs.png' },
+})
 
 export default function BlogPage() {
   const posts = allCoreContent(sortPosts(allBlogs))
