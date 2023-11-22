@@ -1,15 +1,14 @@
 ---
-title: Lisp Notes
-date: '2022-9-21'
-draft: False
-tags: ['notes', 'cs-35L']
-thumbnail: '/static/img/defaults/class-thumbnails/elisp.svg'
-summary: A brief overview of the elisp programming language. Covered in CS35L.
+title: Emacs Lisp
+date: '2022-9-19'
+tags: ['notes', 'cs-35L', 'computer-science']
+thumbnail: '/static/img/cs35L.jpeg'
+summary: The Lisp portion of emacs and how we can edit emacs within itself.
 ---
 
-## Overview
+## Table of Contents
 
-<TOCInline toc={props.toc} exclude="Overview" toHeading={4} />
+<TOCInline toc={props.toc} exclude="Table of Contents" toHeading={5} />
 
 ## Lisp
 
@@ -19,6 +18,10 @@ summary: A brief overview of the elisp programming language. Covered in CS35L.
   - Elisp is a language embedded as a part of larger applications (extension language)
 
 An example of **app-specific language (ASL)**. To some extent, it's an example of the _little language philosophy_. The creators of Emacs took an existing language and mutated it to suit their particular problem.
+
+&nbsp;
+&nbsp;
+&nbsp;
 
 ## Namespace and Security
 
@@ -50,6 +53,10 @@ emacs-version
 (message "You can %s like printf!" "interpolate")
 ; "You can interpolate like printf!"
 ```
+
+&nbsp;
+&nbsp;
+&nbsp;
 
 ## The Language
 
@@ -217,6 +224,10 @@ Example:
 - ; such functions can be called via M-x
 - `(defun add (x y) (interactive) (+ x y))`
 
+&nbsp;
+&nbsp;
+&nbsp;
+
 ## Emacs Byte-code
 
 - You can load external source code into the current namespace with:
@@ -342,6 +353,8 @@ The function `point` returns the current position of the cursor as a number.
 **TIP:** You can use `(global-set-key KEY COMMAND)` to define a custom key bind.
 
 ### Example Customization
+
+<!-- This was originally part of the midterm review in week4.md. -->
 
 **Explain how to arrange for Emacs to treat C-t as a command that causes Emacs to issue a message like this in the echo area:**
 

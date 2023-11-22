@@ -1,21 +1,21 @@
 {
-  "featured": 6,
-  "notes": 33,
+  "featured": 3,
+  "notes": 49,
   "ucla": 3,
   "psych-120a": 11,
   "psychology": 15,
   "psych-124c": 2,
   "cs-111": 1,
-  "computer-science": 1,
+  "computer-science": 17,
   "study-abroad": 16,
   "opinion": 2,
   "london-uncovered": 7,
-  "museums": 7,
-  "cs-35l": 4,
+  "museums-identity-london": 7,
   "software-engineering": 7,
   "events": 2,
   "college-advice": 2,
   "productivity": 1,
   "reading": 1,
-  "finances": 1
+  "finances": 1,
+  "cs-35l": 20
 }
