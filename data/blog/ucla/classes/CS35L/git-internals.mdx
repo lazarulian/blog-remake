@@ -59,10 +59,6 @@ The entire state of the repository is encoded in the special `.git` directory.
 
 > **Emacs Hooks ASIDE:** Because `git clone` does NOT copy hooks, fresh local copies of a repository always have no functioning hooks. Emacs maintainers went around this by preparing a script in the Emacs source code called `autogen.sh`. This script creates a bunch of Git hooks that tailor the repository to be the way the Emacs developers want it to be tailored. This is a nice "gatekeeper" approach that ensures your development is relatively clean.
 
-&nbsp;
-&nbsp;
-&nbsp;
-
 ## Comparison to File Systems
 
 | Similarities                                                                                                                                                                                             |                                                                                                           Differences |
@@ -79,10 +75,6 @@ The entire state of the repository is encoded in the special `.git` directory.
 - A local Git repository and the index are made up of **objects** and some other auxiliary files
 - Files in the filesystem can be mutable. inode numbers thus exist _independently_ of the contents of their files
 - checksums uniquely identify objects _by their content_. Therefore, you **cannot** change objects' contents.
-
-&nbsp;
-&nbsp;
-&nbsp;
 
 ## Git Objects
 

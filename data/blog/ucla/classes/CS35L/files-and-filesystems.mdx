@@ -44,8 +44,6 @@ File names are not recursive by design. If you want to search for files that mat
 find /usr/ -name emacs
 ```
 
-<!-- Originally I had written "inum" in place of "inode number" because that's what I could hear during lectures. It doesn't seem like "inum" is an actual term, so I've updated that. -->
-
 Every file in the POSIX standard has a unique **inode number** associated with it. You can see them with the `-i` flag in the `ls` command:
 
 ```bash
@@ -228,9 +226,6 @@ filename: Too many levels of symbolic links
 - **Symbolic links to hard links?** Yes. (Separate inode)
 - **Hard links to symbolic links?** Yes. (Hard Link shares inode with sym link, not the file the sym link points to)
 - the hard link can point to a different file than the symbolic link that it points to because if the symbolic link breaks, the hard link will still point to the original file (inode) while the symlink's path might change
-
-<!-- This was originally part of the midterm review in week4.md. -->
-
 - **Give an example of how renaming a dangling symbolic link can transform it into a non-dangling symbolic link.**
   - Soft links can be linked to a relative path. Suppose `c` has content `b`, but `b` only exists as `temp/b` relative to the current working directory. We can use `mv c temp` to make the relative path `b` now work since `c` is now in the same directory as `b`.
 

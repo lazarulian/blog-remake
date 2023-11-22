@@ -16,10 +16,6 @@ summary: Search, search search, lets find stuff with RegEX.
 
 When using the system and especially the abstractions of the shell, we do not want to hard code all of the small programs that we can use into the shell. That would make maintaining and adding programs difficult. Thus, in the usr/bin in path, we have a ton of small tools of the system that accomplish tasks really well. The components are then connected to make them fast, maintainable and well structured.
 
-&nbsp;
-&nbsp;
-&nbsp;
-
 ## Special Characters you Must Escape
 
 - `$`
@@ -33,10 +29,6 @@ When using the system and especially the abstractions of the shell, we do not wa
 - `()` (extended)
 - `|` (extended)
 - `?` (extended)
-
-&nbsp;
-&nbsp;
-&nbsp;
 
 ## Grep
 
@@ -91,10 +83,6 @@ OPTIONS
               patterns, and therefore matches nothing.
 ```
 
-&nbsp;
-&nbsp;
-&nbsp;
-
 ## Regular Expressions
 
 ### Basic Regular Expressions
@@ -138,9 +126,8 @@ grep actually uses Basic regular expressions (BREs), a simpler form of the more 
 - `'what ever @ you wont'` take all of the words inside the apostrophe and treat it as a single word
   - you cannot put apostrophes within this type of quoting
 - `"what you like"` = what you like will be treated as a single word
-  - <code> $ \\ `</code> &nbsp; are the special characters in double quotes
+  - <code> $ \\ `</code> are the special characters in double quotes
 
-&nbsp;
 **Consider we are searching for: ** `['"\]`
 
 1. `\` encase all things in a backslash. `\[\'\"\\\]`
@@ -187,7 +174,3 @@ P{3;}       # 3 to infinity instances of P
 '[a-zA-Z0-9]+'          # at least 1 alphanumeric character
 '\\"([^"\]|\\.)*\\"'    # \"(something)\", where (something) is . OR neither " or \
 ```
-
-&nbsp;
-&nbsp;
-&nbsp;

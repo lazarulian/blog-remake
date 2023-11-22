@@ -22,10 +22,6 @@ Although there are many reasons for having version control systems, one importan
    - it keeps track of what you are going to do next, since you update the index and then commit it so that it turns into the past (migrating and emptying the index)
    - the motivation of this is so that you never commit anything that does not work yet
 
-&nbsp;
-&nbsp;
-&nbsp;
-
 ## Basic Git Commands
 
 ### Getting Started with Git
@@ -98,10 +94,6 @@ git log --pretty=fuller
 
 The fuller format shows that every commit has an **author** AND a **committer**, each with their own dates. Git distinguishes between these two contributors. This separation is routine for many larger projects. The author would be the person that writes the code, and the committer would be the overseer that reviews the and confirms the changes. These fields _establish responsibility_ for changes, a major reason for using version control in the first place.
 
-&nbsp;
-&nbsp;
-&nbsp;
-
 ## Making Changes
 
 1. Edit the working files.
@@ -163,10 +155,6 @@ c1 <- c2 <- c4 (origin/master)
       ^- c3 (<- ^- )merge (master)
 ```
 
-&nbsp;
-&nbsp;
-&nbsp;
-
 ### Viewing Differences
 
 ---
@@ -217,10 +205,6 @@ git diff HEAD~..HEAD
 git diff HEAD~4..HEAD
 git diff HEAD^..HEAD
 ```
-
-&nbsp;
-&nbsp;
-&nbsp;
 
 ## Configuring Git
 
@@ -285,10 +269,6 @@ Of course, this also introduces the problem that if your test cases are buggy, t
 git bisect skip v3
 ```
 
-&nbsp;
-&nbsp;
-&nbsp;
-
 ## Tagging
 
 Suppose you want to get all of the source code of a specific version. You want a symbol that stands for a speciifc commit that never moves or changes in time.
@@ -320,10 +300,6 @@ Tagging is a big event within git. You would want the user to know about why the
   - people will use tags to ensure that the package is secure if the tag has someone trustworthy
   - to prevent faking identities, you would use a signed tag that has some sort of authentication (uses a cryptographic key)
 
-&nbsp;
-&nbsp;
-&nbsp;
-
 ## Sub Modules
 
 The reason a module would want to use a submodule is because we want to tie another package into our package and identify it with a commit id or specific version.
@@ -338,10 +314,6 @@ The reason a module would want to use a submodule is because we want to tie anot
 - This keeps both your code and cognitive load modularized.
 - `git submodule foreach git pull origin master` for each submodule, pull each of the submodule differences
 
-  &nbsp;
-  &nbsp;
-  &nbsp;
-
 ## Stashing
 
 Consider you are working on a change but have to change your attention to something else.
@@ -351,10 +323,6 @@ Consider you are working on a change but have to change your attention to someth
 - `git stash push` saves the state of your working files in some part of the index. When you want to retrieve this state, you can get it from the stash stack with:
 
   - `git stash apply`
-
-  &nbsp;
-  &nbsp;
-  &nbsp;
 
 ## Patching
 

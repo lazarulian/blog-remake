@@ -25,10 +25,6 @@ C                    ^     |
 +---------+             +-----+
 ```
 
-&nbsp;
-&nbsp;
-&nbsp;
-
 ## Alternatives to the Client-Server Model
 
 - **Single computer** (CS 31 assignments, where the logistics of networking, OS, etc. were abstracted away).
@@ -39,10 +35,6 @@ C                    ^     |
   - This is in contrast to the less fault-tolerant but more state-consistent client-server model.
 - **Primary secondary**: One primary machine that serves as the "overseer" - it keeps track of how the application is split up among numerous secondary servers.
   - The secondary servers receive a small "subproblem" of the application from the primary server and return any results.
-
-&nbsp;
-&nbsp;
-&nbsp;
 
 ## Performance and Correctness Issues
 
@@ -72,10 +64,6 @@ To improve **latency**:
 
 - ➕ You can use **caching** to speed up responses.
 - ➖ This can cause **stale caches**, which requires **cache validation** to fix, which could be an expensive operation.
-
-&nbsp;
-&nbsp;
-&nbsp;
 
 ## Task Networking Styles
 
@@ -114,10 +102,6 @@ To improve **latency**:
 - Packets can be duplicated via a mechanism called **bridges**
 - All routing decisions are local to the individual routers, so packets may be directed into a loop
 - Packets can be corrupted or stolen
-
-&nbsp;
-&nbsp;
-&nbsp;
 
 ## Internet Protocol Suite (TCP/IP)
 
@@ -192,10 +176,6 @@ To improve **latency**:
 - You use UDP if your application sends single short messages over the Internet without much care if it is lost, duplicated, etc.
   - Intended for apps that _want_ to deal with packets.
 
-&nbsp;
-&nbsp;
-&nbsp;
-
 ## Transport Layer
 
 - **Data channels.** Large data _streams_ (TB of data) that cannot be individual packets
@@ -221,10 +201,6 @@ To improve **latency**:
   - Retransmission of corrupted packets
   - Reassembly of unordered packets
 - A single machine can listen to multiple TCP channels on different **ports**
-
-&nbsp;
-&nbsp;
-&nbsp;
 
 ## Application Layer
 
@@ -254,10 +230,6 @@ To improve **latency**:
 2. **HTML (HyperText Markup Language)**: a way to express the contents of a webpage in a machine-independent format.
 
 > The Internet fundamentally is just HTML and HTTP combined together. HTML is like the content of the Internet, HTTP is how it gets around.
-
-&nbsp;
-&nbsp;
-&nbsp;
 
 ## Variants of HTTP
 
@@ -307,10 +279,6 @@ Added extra features to HTTP:
 - Avoids jitter by avoiding **head-of-line** blocking delays; allows content after a dropped packet to be delivered
   - this means that if the packet is missing, it will either drop or let the browser decide what to do rather than to wait for the missing packet and stall the rest of the packets behind it
 
-&nbsp;
-&nbsp;
-&nbsp;
-
 ## Data Languages
 
 - HTML is an example of a data language. We also have:
@@ -332,11 +300,6 @@ Added extra features to HTTP:
 - Extensible bracket types allow you to define new features without making breaking changes to the language.
   - `<QUOTE>` is one type of bracket with its closing tag `</QUOTE>`, `<ITALIC>` is another, etc.
 - The structure of the document forms a tree structure: the content inside `<ITALICS>` is a child node to `<QUOTE>`.
-
-&nbsp;
-&nbsp;
-
-&nbsp;
 
 ### `telnet` Aside
 
