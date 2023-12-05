@@ -1,0 +1,228 @@
+---
+title: Backups
+date: '2022-10-7'
+tags: ['notes', 'cs-35L', 'computer-science']
+thumbnail: '/static/img/cs35L.jpeg'
+summary: The need for backups, how we keep them, and good practices for them.
+---
+
+## Table of Contents
+
+<TOCInline toc={props.toc} exclude="Table of Contents" toHeading={5} />
+
+## DevOps
+
+- **DevOps**: "Development and Operations". The idea is that you have a single staff that does both development and the logistic stuff
+- The philosophy of DevOps is that the same person should be responsible of the development and the operations of the system
+  - Historically, the communication between the two are often not that good. If the same person knows both, they'll know when and how best to optimize.
+
+### Why we Need Backups
+
+- you lose the drive or its stolen
+- drive failure
+- mistakenly deleting a file
+- corrupted drives
+- malicious trashing (ransomware)
+
+## What to Back Up?
+
+RAM + registers vs. persistent storage
+
+- Ideally you want to recover both because that's the entire _state_ of your system
+- In reality, RAM + registers are hard to backup because they rapidly change and because there often aren't good software interfaces for doing this
+  - usually we focus more on persistent storage.
+
+### Backup Levels
+
+You can perform backups at multiple "levels", with the higher ones being more _efficient_ and the lower ones being simpler and more _general_.
+
+- **Application-level Backup**: Each application knows how to back up its own data and can tailor it to its own needs.
+- **File-level Backup**:
+  - Contents of the files
+  - Metadata of the files
+  - Partitioning (file system layout)
+- **Block-level Backup**: The above is built on top of a lower-level system that's **block** based. You want to save all the blocks representing the above
+  - All files are typically stored as arrays of blocks, with each blocks representing things like directory listing, actual file contents, etc
+  - You don't have to worry about what each block represents - simply back up all the blocks and you will have backed up the entire system
+- might be wasteful when you backup junk blocks
+- some efficiency advantage if all of the blocks are in use
+- you get the exact state and you do not need to worry about the operating system since it is operating at a low level
+
+## How to Back Up Cheaply
+
+- Do them less often.
+- Automated data grooming (auto rm)
+- Do them to a cheaper device, like a hard drive or optical device.
+- Do them to a remote service (this would involve some _trust_ in the backup service).
+- Instead of making an entire copy of your data, you do **incremental backups**.
+- Add redundancy in your devices (RAID)
+
+### Incremental Backups
+
+---
+
+**Backup procedure**
+
+- Only backing up the _changes_ between the old and new changes.
+- The first backup is everything with a timestamp T
+- Subsequent backups are only the differences, with a different timestamp T
+  - you are also saving the directories and the meta entries as well otherwise there will be many issues with deleted files
+- You also change the incremental backups to the files which is implemented as writing the difference between the two files, and when you recover, you would apply the patch of the diff to the changed file
+  - operations include insert, delete, and replace (insert + delete)
+- A block-oriented incremental backup would only need to back up the changed blocks.
+
+**Recovery procedure**
+
+- 1st copy: recover the full backup.
+- Subsequent copies: apply the differences (same as applying a patch file)
+- A limitation is that applying differences may take a while, so typically you would backup differences and periodically backup whole copies.
+- You could also _update_ the backup with the differences, but this is like changing history, which introduces more concerns.
+
+**How do you keep track of which blocks are changes?**
+
+One approach is that with each block, you record the timestamp of when each block was changed. You'd have to record these timestamps somewhere, which means your data would be more complicated than a simple array of blocks. Some software does this anyway, where it sets aside some space for some metadata, checksums, etc.
+
+Another option is to use the output of `diff` instead of the contents of the entire block. This is typically done at a higher level than the block level though.
+
+### Deduplication
+
+---
+
+Suppose you execute:
+
+```shell
+cp bigfile bigcopy
+```
+
+At the block level:
+
+```
+    bigfile         bigcopy
+    v               v
++---+---+---+---+---+---+---+---+
+|   | b | f |   |   | b | c |   |
++---+---+---+---+---+---+---+---+
+```
+
+You could cheat by just making `bigcopy` point to the same file object as `bigfile`:
+
+```
+    bigcopy
+    bigfile
+    v
++---+---+---+---+---+---+---+---+
+|   | b | f |   |   | b | c |   |
++---+---+---+---+---+---+---+---+
+```
+
+From the user's POV, it _looks_ like a copy even if you don't have one in reality.
+
+When you modify `bigcopy`, your `bigcopy` just "remembers" (in its underlying data structure) which additional parts are part of the copy.
+
+```
+    bigcopy --+
+    bigfile   |
+    v         v
++---+---+---+---+---+---+---+---+
+|   | b | f | m |   | b | c |   |
++---+---+---+---+---+---+---+---+
+```
+
+This has recently become the _default_ behavior of the GNU `cp` command.
+
+This is known as **lazy copying**. Eventually, when you modify every block in your copy, _then_ you will have made a copy of every block. Until then, you do it **lazily**, that is, _only as needed_.
+
+This strategy has a name: **copy on write (CoW)**.
+
+- ➕ Speed.
+- ➕ Less space.
+- ➖ Not good for _backups_ because if a block gets corrupted, it affects both the original and copy.
+- ➕ But this also means less underlying data when performing an actual backup.
+
+`git clone` uses this strategy! An example of a backup at the _application level_ too.
+
+- When backing up with blocks, COW is automatically implemented
+  - when you have a corrupted block, it might corrupt the backup copy as well because the filesystem doesn't actually copy it
+
+## File Systems with Backups Built-in
+
+Where old versions of files are always available.
+
+### Versioning Approach
+
+The file system keeps track of the old version of every file you create. It's as if:
+
+```console
+$ echo x > file
+$ ls -l
+---------------- file;1
+$ echo y >> file
+$ ls -1
+---------------- file;1
+---------------- file;2
+```
+
+**When to automatically create a new version?**
+
+- Every time the file is opened for writing, differences made, and then closed
+- Maybe there's some `newversion()` system call
+- In the end, the _applications_ decide when to version.
+
+Still used in some software like OpenVMS, etc.
+
+### Snapshot Approach
+
+- Every now and then, the underlying system takes a consistent snapshot of the entire file system.
+- It doesn't actually copy all the blocks because that would be too expensive. Instead, it uses CoW.
+  - just creates a pointer so that its not that expensive
+- This is used in software like ZFS, btrfs, WAFL (SEASnet).
+
+## Other Techniques
+
+### Multiplexing
+
+- Back up many different systems to a single backup device
+  - This allows multiple backup streams to be combined into a single backup operation, which can improve backup and restore times.
+  - Cons include: Reduced throughput, increased complexity, and loss of data
+  - Pros include: improved resource utilization and efficient backups
+
+### Staging
+
+- Fast devices back up to slow devices:
+
+```
+flash --> disk --> optical tape
+(fast)    (slow)   (even slower)
+```
+
+### Data Grooming
+
+- Remove old data that you don't need anymore before backing up.
+- It's tedious to determine which data isn't needed anymore, so a lot of this is now done automatically. Of course, this has the downside where programs might decide to remove data that users still want.
+
+## Encryption
+
+- Guard against problems like attackers from the inside stealing and/or selling data to other agents.
+- **Checksumming: What if your backup software is flakey?**
+  - You make checksums of your data and then back up those checksums somewhere else. When you recover, you can check if the recovered data matches the checksums.
+
+## Version Control & Backups
+
+What we want to understand is what makes this system work? How can we get a successful version control system?
+
+### SCCS
+
+- First version control system was called SCCS, and rewritten in C
+  - for each file F in the system, there is a history file that contains the history of F
+  - contents were the lines of all of the versions of F, and the start of the entries would be the metadata of the version of the file & commit message
+    - you could read any version with one pass allowing the cost of retrieval to be the size of the history
+
+### RCS
+
+- the same as SCCS except following the metadata, there would be a copy of the most recent version, and after that was reverse deltas (changes)
+  - to get the most recent version allowed for really fast access
+
+### CVS
+
+- went to a client-server model
+- single commit updates on multiple files

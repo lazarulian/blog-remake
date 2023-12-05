@@ -1,0 +1,325 @@
+---
+title: Debugging
+date: '2022-10-11'
+tags: ['notes', 'cs-35L', 'computer-science']
+thumbnail: '/static/img/gdb-debugger.jpeg'
+summary: Common high-level debugging strategies.
+---
+
+## Table of Contents
+
+<TOCInline toc={props.toc} exclude="Table of Contents" toHeading={5} />
+
+## Methods to Debug
+
+- There are two main types of debugging
+  - performance - Change code to optimize for hardware/better performance
+  - the correctness - Verifying that the expected output matches the actual output
+
+## Operational Tools
+
+- Print statements (tracking variable states)
+- `time` is a shell command that tells the amount of CPU time it takes to run a program
+  - works on the unmodified program
+- `ps` (process status) shows which processes take up the most time
+- `ps -ef` print out all of the processes and their run time
+- `ps -ejtf` print out all of the processes and their run time within a tree structure
+- `top` list up the top 20 processes and how much time it has been taking
+- `strace` a meta command that logs to standard error every system call that your program makes
+  - these involve instructions to the kernel, instructions to hardware, c-library, graphics-library, etc.
+
+## System Calls
+
+- A way for programs to interact with the operating system (api to the kernel)
+- The concept of an **operating system** was invented to facilitate interaction between programs and the hardware.
+  - Without it, it would be much easier for programs to maliciously attack hardware or cause I/O conflicts with read/write operations.
+- Programs can make **system calls** _to_ the operating system, and the operating system will then interact with the hardware in a well-defined way and report back with any output
+
+### Categories of System Calls
+
+1. Process control `fork`
+2. File management `open`/`close` a file, `read`/`write`
+3. Device management
+4. information maintenance
+5. Communication
+6. Protection
+
+### Valgrind
+
+- valgrind is a debugging tool mainly used to detect memory-related bugs and to log all instructions a program executes.
+- `valigrind ./a.out foo`
+- valgrind isn’t perfect, but it does help against many trivial memory-related bugs such as bad references
+
+```C
+// valgrind will catch
+char *p = NULL;
+*p = 'x';
+// but won’t catch
+char a [10000];
+char *p = &a[10000];
+*p = 'x';
+```
+
+## GCC
+
+### Stack Protection & Security
+
+- `gcc -fstack-protection` allows you to call stack overflow bugs
+  - This has to do with how the instruction pointer changes to a bogus part of program using buffer overflow attacks
+  - the return instruction is the error
+  - the fstack inserts extra code at the start of the program such that the location of the return address is not necessarily guaranteed and there is a stack canary
+    - if the canary is dead, that means the buffer overflow attack has occured and the stack will be killed
+    - This works because the attacker would have to overwrite the `randomvalue` to get to the bottom of the call frame to reach the return address, which is typically what they need to overwrite to continue their attack.
+  - There is debate whether `-fstack-protector` is a default option. Some Linux distros like Debian and Ubuntu have it on by default. This is off by default on SEASnet. There's also the opposite option called `-fno-stack-protector` that turns the setting off.
+
+## Performance Bugs & Optimization Flags
+
+- The `-O`, `-O2`, `-O3`, etc. flags to specify the level of \*optimization **for CPU usage\***.
+- `gcc -o` allows to slow down the compiler and then to improve the speed of the executable because of the optimizations it finds within the program
+  - caches the registers
+  - out of order execution
+  - harder to debug because the code is a lot harder to read
+- `gcc -o0` will allow for better debugging since the compile time is a lot faster
+- `gcc -flto` performs link time optimizations that allow the o file to have a copy of the source code
+  - way slower to compile and harder to debug
+  - allows for source code level optimizations with the use case
+
+### Performance Bug Improvements
+
+- In GCC, there's a built-in function called `__builtin_unreachable()`
+  - Your code should never call this function
+  - The purpose of this is to mark a certain condition in your code as something that will never happen, so the compiler can optimize it away.
+
+### Maximizing Cache Efficiency (Attributes)
+
+- `__attribute__()` will be a message to the compiler which it can ignore
+  - it is good that it can be ignored such that the compiler can ensure that the program does not break due to an incorrect suggestion
+  - `#define __attribute__(x)`
+- `char buf [1000] x __attribute__((aligned(8)));` this means that allocate x at a multiple of 8 bytes
+  - this would improve the cache hit rate and would be good for the compiler to know
+- `int f(int) __attribute__((cold));` tells the compiler that the function is rarely called
+- `int g(int) __attribute__((hot));` tells the compiler that the function is called often
+  - allows for the compiler to move the machine code into the cache so it does not have to miss and search in memory for the code
+
+### Automating Hot/Cold with Profiling
+
+1. You compile the program with a special flag that inserts extra code to count the number of times each instruction is executed. This understandably slows down execution.
+2. You then run the program to gather the statistics.
+3. Then, you recompile the program _with_ the statistics. That way, the compiler knows which instructions are hot and cold and can decided how to mark them itself.
+
+- As long as your test runs are representative of how your program will actually be run, this is a great way of improving the performance of your application.
+  - this is also a great way to ensure that either your test-cases or program does not have any dead regions that hurt the performance of the program
+
+---
+
+**Other GCC options**
+
+```shell
+gcc --coverage # adds extra instructions that update the profile (counter)
+gprof
+```
+
+---
+
+## Catching Bugs with Static Checking
+
+Debugging your program _before_ the program runs. "Static" here has nothing to do with static allocation/static lifetime; it just means when the program isn't running. This is the opposite of **dynamic checking**.
+
+- ➕ No runtime overhead.
+- ➕ Covered bugs are 100% prevented by the time the program runs.
+- ➖ Some bugs can not be statically checked for 100% reliably.
+
+Example of static checking:
+
+```c
+static_assert(0 <= n);
+```
+
+The implication however is that the expression e.g. `0 <= n` MUST be computable at compile-time. If it isn't, it's a compiler error.
+
+**EXAMPLE:** Suppose you have a program that assumes a `long` is 64 bits:
+
+```c
+#include <limits.h>
+static_assert(LONG_MAX >> 31 >> 31 == 1);
+```
+
+This is once again like a _message from you to the compiler_. The compiler then checks beforehand for this condition before attempting to compile the program.
+
+```c
+if f (int n) {
+  static_assert(n < 0);
+    false
+}
+```
+
+### GCC Warning Flags
+
+In general, the flags beginning with `W` mean "warning". `-Wall` means "turn on all warnings":
+
+```shell
+gcc -Wall
+```
+
+However, people found that this tends to output extraneous/unnecessary warnings. Nowadays, `-Wall` has come to mean "turn on all warnings that most people will find useful."
+
+## `-Wall` implies
+
+- `-Wcomment`: warn about valid but bad comments like `/* a /* bad comment */`
+
+---
+
+- `-Wparentheses`: warn about style considered to be bad because something probably forgot parentheses in situations where operator precedence may be less familiar, like in `i << j + k` or `i < j || k < l && m < n`. The latter is common knowledge, but GCC disagrees, so this flag can be controversial.
+
+---
+
+- `-Waddress`: warn about making pointer comparisons when you probably didn't mean to, like `p = strchr("ab", "b"); if (p == "b") ...`
+
+---
+
+- `-Wstrict-aliasing`: warn about trying to "cheat" with pointers.
+
+  ```c
+  int i;
+  long *p = (long *)&i;
+  ```
+
+  - Aliasing is when you have two names for the same object.
+  - The C/C++ standard states that this results in undefined behavior, even if `int` and `long` happen to be the same size
+  - This is controversial because a lot of low-level programs like the Linux kernel uses this all the time, _very carefully_
+  - This is also why **casting** in general is risky because optimizing compilers may not do what you expect.
+
+---
+
+- `-Wmaybe-uninitialized`: warn about possible paths through a function where you use an uninitialized variable.
+
+  ```c
+  int f(int i)
+  {
+    int n;
+    if (i < 0)
+      n = -i;
+    return n; // if i >= 0, uninitialized n is returned
+  }
+  ```
+
+  If you do something that checks out with arithmetic reasoning, the compiler may or may not be find with it, depending on other flags you pass it.
+
+  ```c
+  int f(int i)
+  {
+    int n;
+    if (i < 100)
+      n = -1;
+    if(i <= -1)
+      return n;
+  }
+  ```
+
+  Thus, there could be false positives if the compiler is not smart enough to deduce that the combination of things you've done always returns an initialized variable.
+
+### Pure Functions
+
+- With GCC, you can declare a [**pure function**](Elisp.md#aside-concept-of-pure-functions) with the signature, telling the compiler that this function should not modify the state of the machine:
+
+```c
+int hash(char *buf, size_t bufsize) __attribute__ ((pure));
+```
+
+- This is stronger than merely declaring the parameters as `const`. A pointer to `const` just promises to not modify an object via its pointer, not that its a pointer to an actual constant.
+
+This way, if you do something like:
+
+```c
+char buf[100];
+char c = buf[0];
+i = hash(buf, sizeof buf);
+// c == buf[0] must be true
+// This gives the compiler opportunities to cache in register, etc.
+```
+
+This will be standardized in C23 as `[[reproducible]]`;
+
+### Const Functions
+
+- Not to be confused with the `const` qualifier on C++ methods.
+
+```c
+int square(int) __attribute__ ((const));
+```
+
+- This is an even stronger flavor of pure functions. The return value can not even depend on the current state of the function, only its arguments.
+- A benefit is that if you call a `const` function multiple times with the same arguments, it could optimize knowing they would return the same value.
+- This will be standardized in C23 as `[[unsequenced]]`.
+
+### Defining a Memory Allocator
+
+- give it how many bytes of memory to allocate and then it will return that
+- `void * my_alloc(ptrdiff_t)__attribute((alloc_size(1), malloc(free, 1), returns_nonnull))` this is the way to declare the memory allocator
+
+## Catching Bugs with Dynamic (Runtime) Checking
+
+- An example of dynamic checking, where you check at _runtime_ and abort or similar if something fails:
+
+```c
+#include <assert.h>
+int f() {
+  /* code */
+  assert(0 <= n);
+}
+```
+
+- `if (n < INT_MAX) abort();` will prevent an integer attack
+  - a better way to do this is define a sanitzer that does the runtime check for you
+
+### GCC -fsanitize
+
+Alternatively, you can let the compiler _insert_ runtime checking.
+
+```shell
+gcc -fsanitize=undefined
+```
+
+Generate extra code to make the program reliably crash if it attempts undefined behavior (except for addresses). This causes the program to be slightly slower.
+
+At the machine level, the adding overflow may be implemented like:
+
+```assembly
+addl %eax,%ebx
+jo   ouch       ; jump if overflow
+
+ouch:
+    call abort
+```
+
+- `gcc -fsanitize=addresss` check for bad uses of pointers
+  - This is the same as `-fsanitize=undefined`, but for addressing errors, such as subscripting an array
+  - Due to technical reasons, this actually only catches _most_ addressing errors, not all.
+- `gcc -fsanitize=leak`
+  - This attempts to insert runtime checks for **memory leaks**. Memory leaks are technically not undefined behavior nor errors.
+- `gcc -fsanitize=thread`
+  - This attempts to insert runtime checks for **race conditions**, where there may be multiple threads that attempt to access the same I/O resource.
+
+Most of the time, these flags are useful for development only. They could be left in for production if the application prioritizes safety over performance.
+
+## How to Debug a Program
+
+### Common Advice
+
+- do not guess at random where the bug is, use developer tools and guess non-randomly
+
+1. Stabilize the Failure - find a testcase that reliably makes the program fail
+2. Locate the Failure's Source - figure out why the crash occurred within the source of the failure
+3. Put in print statements to find out more about the failure - GDB is a more efficient way of using print statements `(gcc -g)` is a good strategy to use. Basically it turns off the address randomization which causes issues with debugging.
+
+## Review
+
+- try not to debug, use static checks and compiler runtime flags to debug rather than going through the codebase and making random changes
+- write test cases - test driven development allows to think on where your code might fail and allow for separation of information
+  - maybe use C++, Java, or Rust
+- become a defensive programmer using tools such as runtime checking, putting in your own checks, and using traces and logs
+  - allows for retrospective analysis of failure
+  - use assertions to do runtime checks
+- Use a barricade design pattern that allows for a barricade that protects bad access to the internals to your system
+- use interpreters (software support)
+- virtual machines to test on different systems (hardware support)
