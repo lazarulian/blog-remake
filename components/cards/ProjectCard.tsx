@@ -21,7 +21,7 @@ function ProjectCard({ slug, date, title, tags, thumbnail, summary }) {
           </Link>
         </div>
         {/* Description */}
-        <p className="text-fun-gray text-left text-sm">{summary}</p>
+        <p className="text-left text-sm text-gray-500 dark:text-gray-400">{summary}</p>
         {/* Tags */}
         <ul className="-ml-2 mt-2 flex list-none flex-wrap items-center">
           <li className="m-1 rounded-lg bg-slate-300 px-2 py-1 text-sm dark:bg-slate-600">
