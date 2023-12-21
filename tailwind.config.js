@@ -20,7 +20,7 @@ module.exports = {
         '8/5': '8 / 5',
       },
       lineHeight: {
-        11: '2.75rem',
+        11: '1.75rem',
         12: '3rem',
         13: '3.25rem',
         14: '3.5rem',
@@ -33,6 +33,9 @@ module.exports = {
       typography: ({ theme }) => ({
         DEFAULT: {
           css: {
+            p: {
+              lineHeight: '1.5',
+            },
             a: {
               color: theme('colors.primary.600'),
               '&:hover': {
@@ -42,10 +45,12 @@ module.exports = {
             },
             'h1,h2': {
               fontWeight: '700',
+              lineHeight: '0.25',
               letterSpacing: theme('letterSpacing.tight'),
             },
             h3: {
               fontWeight: '600',
+              lineHeight: '1',
             },
             code: {
               color: theme('colors.gray.800'),
@@ -73,12 +78,20 @@ module.exports = {
             hr: { borderColor: theme('colors.gray.200') },
             'ol li::marker': {
               fontWeight: '600',
+              lineHeight: '1.5',
               color: theme('colors.gray.500'),
             },
             'ul li::marker': {
               backgroundColor: theme('colors.gray.500'),
+              lineHeight: '1.5',
             },
-            strong: { color: theme('colors.gray.600') },
+            ul: {
+              lineHeight: '1.5',
+            },
+            ol: {
+              lineHeight: '1.5',
+            },
+            strong: { color: 'black' },
             blockquote: {
               color: theme('colors.gray.900'),
               borderLeftColor: theme('colors.gray.200'),

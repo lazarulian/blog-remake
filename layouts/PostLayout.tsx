@@ -58,7 +58,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
               <div className="prose max-w-none pb-8 pt-10 dark:prose-invert">
                 <img className="aspect-[8/5] rounded-md object-cover" src={thumbnail} />
-                {children}
+                <div className="text-black dark:text-gray-100">{children}</div>
               </div>
             </div>
             <div className="relative top-8 lg:sticky ">

@@ -44,7 +44,9 @@ const HomeList = ({ posts, MAX_DISPLAY }) => {
                   </div>
                 </div>
                 <div className="xl:col-span-2 xl:row-span-1">
-                  <div className="prose max-w-none text-gray-500 dark:text-gray-400">{summary}</div>
+                  <div className="prose max-w-none pb-1 leading-6 text-gray-500 dark:text-gray-400">
+                    {summary}
+                  </div>
                   <div className="text-base font-medium leading-6">
                     <Link
                       href={`/blog/${slug}`}
