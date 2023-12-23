@@ -1,6 +1,5 @@
 import 'css/tailwind.css'
 import 'pliny/search/algolia.css'
-import '@/css/rocket.css'
 
 import { Space_Grotesk } from 'next/font/google'
 import { Analytics, AnalyticsConfig } from 'pliny/analytics'
