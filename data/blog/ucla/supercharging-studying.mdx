@@ -1,0 +1,242 @@
+---
+title: Supercharging Your Studying with ChatGPT & Anki
+date: '2024-1-17'
+tags: ['ucla', 'college-advice']
+thumbnail: '/static/img/ucla/supercharge-studying.webp'
+summary: Make studying easy with ChatGPT & Anki. You'll never need to cram again.
+---
+
+<TOCInline toc={props.toc} exclude="Overview" asDisclosure toHeading={3} />
+
+Throughout college, I have taken a number of course that rely on some sort of memorization within the testing that takes place. Whether the memorization directly leads to selecting a correct answer choice, or is the basis for problem solving in an exam, memorizing fundamental information can be helpful.
+
+The best way to prepare for this by far, is spaced repetition of material covered every single lecture. This way, you won’t really have to memorize things right before the midterm and the final, and you can work on doing things that can prepare you further like taking practice tests. The issue with spaced repetition is you have to create flashcards that you can conduct spaced repetition on and this can be tedious and just annoying to do after every class.
+
+## The Solution
+
+The solution that I have found to this issue is using a combination of ChatGPT, Python, and Anki to ensure that I can get my spaced repetition in with marginal issues. Basically, you would take your notes, either paste them into ChatGPT or make an API call to OpenAI, and that would return a JSON containing flashcards from those notes. From there, the JSON
+
+### Ideal Workflow
+
+So ideally, the way that you would want to study this information is to take your notes in class every single day and then apply the following routine after class. Then you just transition into a regular anki workflow where you check the app every day and go through your cards. I find it helpful to edit the cards as I go through them and add pictures and other relevant information that might be useful.
+
+![Conversion Workflow](/static/img/ucla/supercharge-studying-diagram.png)
+
+I know that many people talk about how handwriting notes will allow you to remember the material better and that is true to an extent. Typing the notes might not allow for you to retain the notes as well but when typing them in conjunction with the following routine, the fact that you are doing active recall rather than passive recall will outweigh the benefits of handwriting the notes.
+
+## The Software
+
+### The GPT Prompt (Notes to JSON)
+
+I have created the following custom GPT that will be able to convert the notes into the perfect format for the script that I wrote: [Anki Expert](https://chatgpt.com/g/g-PnPZjrGWO-anki-expert).
+
+For example lets take the following notes and convert them:
+
+**Raw Notes**
+
+```markdown
+## Eye Movement Control System
+
+- researchers are able to gauge decision-making within primates by tracking their eye movements over different targets that appear on the screen
+  - We turn this into a decision-making task by allowing the primates to choose between different targets on the screen, and potentially get rewarded based off of the target that they select based off of their eye
+
+### Superior Colliculus
+
+- Superior colliculus contains a “motor map” of visual space
+  - There are different neurons that map to different places your eyes might gaze, and each of the neurons have movement fields
+  - To trigger an eye movement, where you direct your gaze from one target to another, the cells that map to the target, increase their firing rates sharply, which will evoke saccades, according to topographic organization
+  - They also show anticipatory activity meaning that if you're thinking about moving your gaze, they might also start firing a little more
+- Superior colliculus & multiple potential targets: during the uncertainty period the SC activity for the particular saccade scales with the number of targets, just like the expected value
+  - 1 target: EV(target) = 100% \* reward magnitude
+  - 2 targets: EV(target) = 50% \* reward magnitude
+  - 4 targets: EV(target) = 25% \* reward magnitude
+  - 8 targets: EV(target) = 12.5% \* reward magnitude
+- during the uncertainty period, the SC activity for a particular saccade scales with the number of targets, just like EV, but when the target is selected, the firing rate is similar regardless of how many initial targets there are
+
+**Resolving Decision Making**
+
+1. Population vector representations
+2. Winner-Take-All Dynamic
+
+### Population Vectors
+
+- Cells near the stimulation site respond to saccades in many different directions and SC neurons are generally broadly tuned to saccade direction
+- So lets say we have a target for the eye movement at A, neurons B and C will still be slightly active. They each will have their preferred direction and they are kind of fighting for their direction to be selected
+  - The population vector will be the vector sum of the different neurons that will fire during the target within the SC
+- Consider, B we are asking for the target to be at B and end up getting something closer to in between B and D because we deactivated A
+- In executing a single eye movement, all of the general neurons within the vicinity will contribute to where the gaze is directed
+
+---
+
+**Population Vector Algorithm:**
+
+1. Each cell comprises a vector emanating from the origin and aligned along its preferred direction.
+2. The length of each vector is dependent on the neurons firing rate
+3. The reach angle is the vector sum of all of the neuron’s vectors
+
+---
+
+- the great part about the population vectors is the idea that we have redundancy within the neurons so that if some neurons do not work, it will not destroy the entire system
+  - also, the noise in individual neurons gets averaged out
+- Incoherent or inconsistent representations can lead to maladaptive behaviors due to
+  vector averaging
+
+### Winner Takes all Networks
+
+- When a neuron is excited, it will excite other neurons that are nearby and have a similar preferred direction
+- The inhibition portion allows for one corehent thing will get decided on. This occurs when one neuron will get ahead of the others.
+```
+
+**Converted Notes**
+
+```JSON
+[
+    {
+        "front": "How do researchers gauge decision-making in primates?",
+        "back": "By tracking their eye movements over different targets on the screen."
+    },
+    {
+        "front": "How do primates participate in a decision-making task in eye movement studies?",
+        "back": "Primates choose between different targets on the screen and may receive rewards based on their selected target."
+    },
+    {
+        "front": "What is the role of the superior colliculus in eye movement control?",
+        "back": "The superior colliculus contains a 'motor map' of visual space, with neurons mapping to different places the eyes might gaze."
+    },
+    {
+        "front": "What happens to neurons in the superior colliculus when you direct your gaze from one target to another?",
+        "back": "Neurons that map to the target increase their firing rates sharply, triggering saccades."
+    },
+    {
+        "front": "What is anticipatory activity in the superior colliculus?",
+        "back": "It refers to neurons increasing their firing rates when you're thinking about moving your gaze, even before the movement occurs."
+    },
+    {
+        "front": "How does superior colliculus activity scale with the number of potential targets during the uncertainty period?",
+        "back": "SC activity for a particular saccade scales with the expected value of the reward, decreasing as the number of targets increases."
+    },
+    {
+        "front": "What happens to the firing rate in the superior colliculus when a target is selected, regardless of the number of initial targets?",
+        "back": "The firing rate becomes similar, regardless of how many initial targets there were."
+    },
+    {
+        "front": "What are the two key processes involved in resolving decision-making in eye movement control?",
+        "back": "Population vector representations and Winner-Take-All dynamics."
+    },
+    {
+        "front": "How do superior colliculus neurons respond to saccades in different directions?",
+        "back": "Neurons are broadly tuned to saccade direction and respond to multiple directions, contributing to population vector formation."
+    },
+    {
+        "front": "What is a population vector in the context of eye movement control?",
+        "back": "A vector sum of different neurons firing in the superior colliculus, representing the direction of the eye movement."
+    },
+    {
+        "front": "How does deactivating certain neurons affect the population vector and eye movement?",
+        "back": "Deactivating certain neurons can shift the eye movement target, as the population vector is the sum of all active neurons' contributions."
+    },
+    {
+        "front": "What ensures redundancy and resilience in the population vector mechanism?",
+        "back": "Redundancy in neurons ensures that even if some neurons fail, the overall system continues to function effectively."
+    },
+    {
+        "front": "How does the population vector mechanism help mitigate noise in individual neurons?",
+        "back": "Noise gets averaged out across the population, ensuring more accurate movement direction."
+    },
+    {
+        "front": "What can happen if there are incoherent or inconsistent population vector representations?",
+        "back": "Incoherent or inconsistent representations can lead to maladaptive behaviors due to vector averaging."
+    },
+    {
+        "front": "What happens when a neuron excites nearby neurons with similar preferred directions in a Winner-Takes-All network?",
+        "back": "The excited neuron stimulates nearby neurons with similar directions, eventually leading to one coherent decision."
+    },
+    {
+        "front": "How does inhibition contribute to the Winner-Takes-All dynamic?",
+        "back": "Inhibition allows one dominant neuron to get ahead of others, leading to a clear decision."
+    }
+]
+
+```
+
+### The Script (JSON to Anki)
+
+So this next part is a little more complicated if you have never set anything up in your development environment before. The other option is to use the public webpage that should hit your anki endpoint for you but as of 08/14/2024 that is still in progress.
+
+**Installation Requirements**
+
+- [Python3](https://www.python.org/downloads/)
+- [Anki](https://apps.ankiweb.net/)
+- [AnkiConnect](https://ankiweb.net/shared/info/2055492159)
+
+**Running the Script**
+
+So to actually run the script, you are going to create two files within a folder of your choice. One of the files will be called `anki_script.py` and the other one will be called `flashcards.json`.
+
+```python
+# anki_script.py
+
+import json
+import urllib.request
+
+deck_name = "sample_deck"
+flashcards_path = "flashcards.json"
+
+def request(action, **params):
+    return {'action': action, 'params': params, 'version': 6}
+
+# Add Card and Catch Errors
+def invoke(action, **params):
+    requestJson = json.dumps(request(action, **params)).encode('utf-8')
+    response = json.load(urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:8765', requestJson)))
+    if len(response) != 2:
+        raise Exception('response has an unexpected number of fields')
+    if 'error' not in response:
+        raise Exception('response is missing required error field')
+    if 'result' not in response:
+        raise Exception('response is missing required result field')
+    if response['error'] is not None:
+        raise Exception(response['error'])
+    return response['result']
+
+# Load Flashcards from Json
+with open(flashcards_path, 'r') as file:
+        flashcards = json.load(file)
+        num_flashcards = 0
+
+        for flashcard in flashcards:
+            front_content = flashcard['front']
+            back_content = flashcard['back']
+
+            # Create Flashcards
+            num_flashcards += 1
+            result = invoke(action='addNote', note={"deckName": deck_name, "modelName": "Basic", "fields": {"Front": front_content, "Back": back_content}})
+            print('✅ Successfully Created Card {}: {}'.format(num_flashcards, result))
+
+        print('\n ✅ Created {} flashcards.'.format(len(flashcards)))
+```
+
+```json
+// flashcards.json
+
+[
+  {
+    "front": "How do researchers gauge decision-making in primates?",
+    "back": "By tracking their eye movements over different targets on the screen."
+  }
+]
+```
+
+Note, you must edit the deckname field in the script for it to work, otherwise it will try adding to the deck "sample_deck" which probably will not exist in your anki installation.
+
+Now with these two files, with your `flashcards.json` populated with the flashcards you want, you can invoke the Python script in two ways. The way that I prefer is to open up terminal or powershell and run the script through the command line. For example:
+
+```Bash
+$ python3 anki.py
+```
+
+The other option is to execute the python script with a shebang that points to the location of your python script. With this option, you can just double click the script file and then it should automatically open a terminal instance for you with the script running. If you want to do that, [here](https://realpython.com/python-shebang/) is a guide that documents the process for setting that up.
+
+## Concluding Remarks
+
+All in all, this method can be used in the long term to solidify your understanding of the material that you want to study, or be used as a last minute flashcard tool. Creating flashcards is so annoying and hopefully this method will help alleviate that process for you.
