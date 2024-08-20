@@ -1,7 +1,8 @@
 {
+  "journal": 1,
+  "ucla": 8,
   "featured": 3,
   "notes": 52,
-  "ucla": 7,
   "college-advice": 3,
   "reading": 2,
   "finances": 2,
@@ -15,7 +16,7 @@
   "opinion": 2,
   "london-uncovered": 7,
   "museums-in-london": 7,
-  "events": 2,
+  "events": 1,
   "productivity": 1,
   "cs-35l": 22
 }
