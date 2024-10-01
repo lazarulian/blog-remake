@@ -3,6 +3,7 @@ import ProjectCard from '@/components/cards/ProjectCard'
 import siteMetadata from '@/data/siteMetadata'
 import HomeList from '@/components/lists/HomeList'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
+import Smiley from '@/components/animations/Smiley'
 import PageTitle from '@/components/PageTitle'
 
 const MAX_DISPLAY = 5
@@ -23,6 +24,9 @@ export default function Home({ posts }) {
               journey through the highs and lows of my life can lend you some cheat codes for your
               own.
             </h2>
+          </div>
+          <div className="invisible mx-2 my-12 w-96 items-center justify-center pt-5 xl:visible">
+            <Smiley />
           </div>
         </div>
         <div className="divide-y divide-gray-200 dark:divide-gray-700">
